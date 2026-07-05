@@ -1,0 +1,23 @@
+services:
+  # Local development with hot reload: docker compose up app-dev
+  app-dev:
+    build:
+      context: .
+      target: dev
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_BASE_URL=${VITE_API_BASE_URL:-}
+    volumes:
+      - .:/app
+      - /app/node_modules
+    stdin_open: true
+    tty: true
+
+  # Production-like build served by nginx: docker compose up app
+  app:
+    build:
+      context: .
+      target: production
+    ports:
+      - "8080:80"

@@ -31,6 +31,24 @@ npm run preview   # preview the production build locally
 npm run lint       # eslint
 ```
 
+### Running with Docker instead
+
+No local Node install needed — everything runs in a container.
+
+```bash
+docker compose up app-dev     # hot-reloading dev server → http://localhost:5173
+docker compose up app          # production build served by nginx → http://localhost:8080
+```
+
+`app-dev` mounts your source into the container, so edits on your machine hot-reload same as `npm run dev`. `app` runs `npm run build` inside the image and serves the static output with nginx — this is what you'd actually deploy. If port `8080` (or `5173`) is already taken on your machine, edit the left-hand side of the `ports:` mapping in `docker-compose.yml`, e.g. `"8081:80"`.
+
+Build without compose:
+
+```bash
+docker build --target dev -t creazione-frontend:dev .
+docker build --target production -t creazione-frontend:prod .
+```
+
 ## The big idea: pages → features → shared
 
 The codebase is organized around one rule: **business logic lives with the feature it belongs to, not in one giant page file.** Everything flows in one direction:
@@ -168,6 +186,15 @@ Brand colors, typography, and component styling conventions are documented separ
 ```bash
 npx shadcn add <component-name>
 ```
+
+## Docker files (repo root)
+
+| File | Purpose |
+|---|---|
+| `Dockerfile` | Multi-stage build: `dev` (Vite dev server) and `production` (static build served by nginx) |
+| `docker-compose.yml` | Defines the `app-dev` and `app` services described above |
+| `nginx.conf` | Serves `dist/` in production, with SPA fallback + static asset caching |
+| `.dockerignore` | Keeps `node_modules`, `.env`, `.git`, etc. out of the image build context |
 
 ## Path aliases
 
