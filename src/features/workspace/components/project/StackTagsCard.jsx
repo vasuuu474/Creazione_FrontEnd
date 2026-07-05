@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Plus, X } from 'lucide-react'
-import Tag from '../common/Tag'
+import Tag from '@/components/common/Tag'
 
 export default function StackTagsCard({ tags, isEditing, editState, setEditState }) {
   const [newTagInput, setNewTagInput] = useState('')

@@ -1,20 +1,27 @@
 import React from 'react'
 import { LayoutDashboard, Users, Settings, HelpCircle } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { useUIStore } from '@/store/useUIStore'
+import { useIsFounder } from '../../hooks/useIsFounder'
+import { useHeaderEditing } from '../../hooks/useHeaderEditing'
 
-export default function Sidebar({ activeView, onViewChange, onMembersClick, onSettingsClick, onHelpClick, isFounder }) {
+export default function Sidebar() {
+  const activeView = useUIStore((state) => state.activeView)
+  const setActiveView = useUIStore((state) => state.setActiveView)
+  const openModal = useUIStore((state) => state.openModal)
+  const isFounder = useIsFounder()
+  const { requestEditHeader } = useHeaderEditing()
+
   const menuItems = [
-    { id: 'workspace', label: 'Workspace', icon: LayoutDashboard, action: () => onViewChange('workspace') },
-    { id: 'members', label: 'Members', icon: Users, action: onMembersClick },
-    ...(isFounder ? [
-      { id: 'settings', label: 'Settings', icon: Settings, action: onSettingsClick }
-    ] : []),
-    { id: 'help', label: 'Help', icon: HelpCircle, action: onHelpClick },
+    { id: 'workspace', label: 'Workspace', icon: LayoutDashboard, action: () => setActiveView('workspace') },
+    { id: 'members', label: 'Members', icon: Users, action: () => openModal('members-roster') },
+    ...(isFounder ? [{ id: 'settings', label: 'Settings', icon: Settings, action: requestEditHeader }] : []),
+    { id: 'help', label: 'Help', icon: HelpCircle, action: () => openModal('help') },
   ]
 
   return (
     <aside className="w-72 bg-[#f8f9fc] border-r border-brand-border h-[calc(100vh-64px)] flex flex-col p-6 sticky top-16 select-none">
-      
+
       {/* Navigation Menu */}
       <nav className="space-y-1.5 flex-1">
         {menuItems.map((item) => {
