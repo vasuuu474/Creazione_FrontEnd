@@ -1,8 +1,9 @@
-import React from 'react'
-import WorkspacePage from './pages/WorkspacePage'
+import EnterDetails from './features/personal-details-page/EnterDetails'
 
 function App() {
-  return <WorkspacePage />
+  return (
+    <EnterDetails />
+  )
 }
 
 export default App
