@@ -1,8 +1,5 @@
-import React from 'react'
-import WorkspacePage from './pages/WorkspacePage'
-
-function App() {
-  return <WorkspacePage />
+import WorkspacePage from "./pages/WorkspacePage";
+function App(){
+  return<WorkspacePage/>;
 }
-
-export default App
+export default App;
