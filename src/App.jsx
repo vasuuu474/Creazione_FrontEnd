@@ -1,8 +1,8 @@
 import React from 'react'
-import WorkspacePage from './pages/WorkspacePage'
+import ProfilePage from './features/profile-page/ProfilePage'
 
 function App() {
-  return <WorkspacePage />
+  return <ProfilePage />
 }
 
 export default App
