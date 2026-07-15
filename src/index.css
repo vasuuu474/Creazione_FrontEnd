@@ -106,6 +106,16 @@
     --sidebar-accent-foreground: oklch(0.205 0 0);
     --sidebar-border: oklch(0.922 0 0);
     --sidebar-ring: oklch(0.708 0 0);
+    --app-bg: #F9F8F4;
+    --app-panel: #294835;
+    --app-panel-hover: #355B44;
+    --app-heading: #222222;
+    --app-muted: #6B7280;
+    --app-subtle: #7A7A7A;
+    --app-input-border: #D9D9D9;
+    --app-input-bg: #ffffff;
+    --app-accent: #294835;
+    --app-accent-hover: #355B44;
 }
 
 .dark {
@@ -140,6 +150,16 @@
     --sidebar-accent-foreground: oklch(0.985 0 0);
     --sidebar-border: oklch(1 0 0 / 10%);
     --sidebar-ring: oklch(0.556 0 0);
+    --app-bg: #0F1117;
+    --app-panel: #162A1F;
+    --app-panel-hover: #1E3829;
+    --app-heading: #F1F1F3;
+    --app-muted: #9CA3AF;
+    --app-subtle: #71717A;
+    --app-input-border: #2D2D35;
+    --app-input-bg: #1A1A22;
+    --app-accent: #3D7A56;
+    --app-accent-hover: #4A8D65;
 }
 
 @layer base {
