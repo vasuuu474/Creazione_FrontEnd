@@ -29,7 +29,11 @@ export const useProjectStore = create((set, get) => ({
     }
   },
 
-  publishIdea: (title, description) => {
+  // `founder` is optional so Workspace's existing CreateIdeaModal call
+  // (publishIdea(title, description)) keeps working unchanged. Home's
+  // "Pitch a New Idea" flow passes the current user as founder, which is
+  // what makes useIsFounder() return true for them on the Workspace page.
+  publishIdea: (title, description, founder) => {
     set((state) => ({
       project: {
         ...state.project,
@@ -37,6 +41,7 @@ export const useProjectStore = create((set, get) => ({
         scopeParagraphs: [description || 'No description provided.'],
         scopeBullets: [],
         phase: 'IDEATION',
+        ...(founder ? { founder } : {}),
       },
     }))
   },
