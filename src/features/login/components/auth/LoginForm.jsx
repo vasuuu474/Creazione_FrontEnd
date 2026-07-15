@@ -4,6 +4,7 @@ import { Eye, EyeOff } from "lucide-react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
+import { useAuthStore } from "@/store/useAuthStore";
 
 const GithubIcon = () => (
   <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -11,8 +12,23 @@ const GithubIcon = () => (
   </svg>
 );
 
-export default function LoginForm({ onSignUpClick }) {
+export default function LoginForm({ onSignUpClick, onLoginSuccess }) {
   const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const setUser = useAuthStore((state) => state.setUser);
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    // TODO: replace with a real auth API call once the backend exists.
+    setUser({
+      name: email.split("@")[0] || "New User",
+      email,
+      role: "Member",
+      avatar: "",
+    });
+    onLoginSuccess?.();
+  };
 
   return (
     <div className="w-full max-w-[520px] bg-transparent">
@@ -26,7 +42,7 @@ export default function LoginForm({ onSignUpClick }) {
         </p>
       </div>
 
-      <div className="space-y-5">
+      <form onSubmit={handleLogin} className="space-y-5">
 
         <div>
           <Label className="text-[var(--app-heading)] font-semibold text-xs tracking-wide uppercase transition-colors duration-300">Email Address</Label>
@@ -34,6 +50,9 @@ export default function LoginForm({ onSignUpClick }) {
           <Input
             type="email"
             placeholder="name@company.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
             className="mt-2 h-11 rounded-xl border-[var(--app-input-border)] bg-[var(--app-input-bg)] px-3.5 text-base md:text-sm text-[var(--app-heading)] placeholder:text-[var(--app-subtle)]/60 transition-all duration-300 focus:border-[var(--app-accent)] focus:ring-1 focus:ring-[var(--app-accent)] shadow-none"
           />
         </div>
@@ -46,6 +65,9 @@ export default function LoginForm({ onSignUpClick }) {
             <Input
               type={showPassword ? "text" : "password"}
               placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
               className="h-11 rounded-xl border-[var(--app-input-border)] bg-[var(--app-input-bg)] pl-3.5 pr-11 text-base md:text-sm text-[var(--app-heading)] placeholder:text-[var(--app-subtle)]/60 transition-all duration-300 focus:border-[var(--app-accent)] focus:ring-1 focus:ring-[var(--app-accent)] shadow-none"
             />
 
@@ -67,13 +89,13 @@ export default function LoginForm({ onSignUpClick }) {
             Remember me
           </label>
 
-          <button className="text-[var(--app-accent)] hover:text-[var(--app-accent-hover)] hover:underline font-semibold transition-colors duration-300 cursor-pointer">
+          <button type="button" className="text-[var(--app-accent)] hover:text-[var(--app-accent-hover)] hover:underline font-semibold transition-colors duration-300 cursor-pointer">
             Forgot Password?
           </button>
 
         </div>
 
-        <Button className="w-full h-[52px] rounded-[12px] bg-[var(--app-panel)] hover:bg-[var(--app-panel-hover)] text-white font-semibold text-base transition-all duration-300 shadow-none cursor-pointer">
+        <Button type="submit" className="w-full h-[52px] rounded-[12px] bg-[var(--app-panel)] hover:bg-[var(--app-panel-hover)] text-white font-semibold text-base transition-all duration-300 shadow-none cursor-pointer">
           Login
         </Button>
 
@@ -88,7 +110,7 @@ export default function LoginForm({ onSignUpClick }) {
           </button>
         </p>
 
-      </div>
+      </form>
     </div>
   );
 }

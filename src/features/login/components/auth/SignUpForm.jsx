@@ -11,8 +11,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { useAuthStore } from "@/store/useAuthStore";
 
-export default function SignUpForm({ onLoginClick }) {
+export default function SignUpForm({ onLoginClick, onSignUpSuccess }) {
+  const setUser = useAuthStore((state) => state.setUser);
   const [showPassword, setShowPassword] = useState(false);
   const [form, setForm] = useState({
     firstName: "",
@@ -35,9 +37,15 @@ export default function SignUpForm({ onLoginClick }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form Submitted:", form);
+    // TODO: replace with a real signup API call once the backend exists.
     const fullName = `${form.firstName}${form.middleName ? ' ' + form.middleName : ''}${form.lastName ? ' ' + form.lastName : ''}`;
-    alert(`Account created successfully for ${fullName}!`);
+    setUser({
+      name: fullName,
+      email: form.email,
+      role: "Member",
+      avatar: "",
+    });
+    onSignUpSuccess?.();
   };
 
   return (
