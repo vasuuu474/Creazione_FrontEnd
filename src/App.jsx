@@ -6,7 +6,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./features/login/pages/Login";
 import SignUp from "./features/login/pages/SignUp";
 import EnterDetails from "./features/personal-details-page/pages/EnterDetails";
-import HomePage from "./features/home-page/pages/HomePage";
+import HomePage from "./features/home-page/HomePage";
 import WorkspacePage from "./pages/WorkspacePage";
 import ProfilePage from "./pages/ProfilePage";
 
