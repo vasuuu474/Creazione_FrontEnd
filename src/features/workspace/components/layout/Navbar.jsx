@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Bell, ChevronDown, LogOut, User, Settings, Users } from 'lucide-react'
 import Logo from '@/components/common/Logo'
 import {
@@ -16,6 +17,7 @@ import { useIsFounder } from '../../hooks/useIsFounder'
 import { useHeaderEditing } from '../../hooks/useHeaderEditing'
 
 export default function Navbar() {
+  const navigate = useNavigate()
   const currentUser = useAuthStore((state) => state.currentUser)
   const switchUser = useAuthStore((state) => state.switchUser)
   const founderEmail = useProjectStore((state) => state.project.founder.email)
@@ -119,7 +121,18 @@ export default function Navbar() {
           {/* User Profile Dropdown */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="flex items-center gap-1.5 focus:outline-none rounded-full p-0.5 hover:bg-gray-100 transition-all cursor-pointer">
+              <button
+                onClick={(e) => {
+                  // Clicking the avatar image itself jumps straight to
+                  // Profile; clicking elsewhere in this button (e.g. the
+                  // chevron) still opens the dropdown as before.
+                  if (e.target.tagName === 'IMG') {
+                    e.preventDefault()
+                    navigate('/profile')
+                  }
+                }}
+                className="flex items-center gap-1.5 focus:outline-none rounded-full p-0.5 hover:bg-gray-100 transition-all cursor-pointer"
+              >
                 <img
                   src={currentUser.avatar}
                   alt={currentUser.name}
@@ -142,7 +155,10 @@ export default function Navbar() {
               </div>
               <DropdownMenuSeparator className="bg-brand-border" />
 
-              <DropdownMenuItem className="flex items-center gap-2 text-xs py-2 text-brand-text hover:bg-gray-50 rounded-md cursor-pointer">
+              <DropdownMenuItem
+                onClick={() => navigate('/profile')}
+                className="flex items-center gap-2 text-xs py-2 text-brand-text hover:bg-gray-50 rounded-md cursor-pointer"
+              >
                 <User className="w-4 h-4 text-brand-text-muted" />
                 <span>My Profile</span>
               </DropdownMenuItem>
