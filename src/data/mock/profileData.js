@@ -1,27 +1,17 @@
-import alexAvatar from '@/assets/alex_sterling_avatar.jpg'
+import defaultPfp from '@/assets/default_pfp.png'
 
 export const initialProfileData = {
   profile: {
-    name: 'Alex Sterling',
+    name: 'New User',
     title: 'Senior Systems Architect • 12+ Years Exp.',
-    email: 'alex.sterling@profilepage.io',
-    phone: '+1 (555) 012-3456',
-    location: 'San Francisco, CA',
-    avatar: alexAvatar,
+    email: 'newuser@creazione.com',
+    phone: '',
+    location: '',
+    avatar: defaultPfp,
   },
-  bioText: 'Passionate technologist with over a decade of experience building scalable enterprise infrastructure. I specialize in bridging the gap between high-level architectural vision and ground-level execution. Currently focusing on open-source sustainability and collaborative R&D for next-generation network protocols.',
-  languages: [
-    { name: 'English', level: 'Native' },
-    { name: 'German', level: 'Fluent' },
-    { name: 'Mandarin', level: 'Basic' },
-  ],
-  skills: [
-    'Kubernetes',
-    'Cloud Infrastructure',
-    'Rust',
-    'Distributed Systems',
-    'Project Mentorship',
-  ],
+  bioText: '',
+  languages: [],
+  skills: [],
   activeTab: 'created',
   projectsList: {
     created: [
@@ -65,6 +55,7 @@ export const initialProfileData = {
         iconType: 'network',
       },
     ],
+    saved: [],
   },
   expertise: {
     level: 'SENIOR LEVEL',

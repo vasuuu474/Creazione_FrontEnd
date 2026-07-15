@@ -31,7 +31,7 @@ export const useProjectStore = create((set, get) => ({
 
   // `founder` is optional so Workspace's existing CreateIdeaModal call
   // (publishIdea(title, description)) keeps working unchanged. Home's
-  // "Pitch a New Idea" flow passes the current user as founder, which is
+  // "Create a New Idea" flow passes the current user as founder, which is
   // what makes useIsFounder() return true for them on the Workspace page.
   publishIdea: (title, description, founder) => {
     set((state) => ({
@@ -75,4 +75,59 @@ export const useProjectStore = create((set, get) => ({
         },
       }
     }),
+
+  joinProjectUpdateStore: (title, description, tags) =>
+    set((state) => ({
+      project: {
+        ...state.project,
+        title,
+        scopeParagraphs: [description || 'No description provided.'],
+        scopeBullets: [],
+        tags: tags ? tags.map((t) => t.toUpperCase()) : [],
+        phase: 'IDEATION',
+      },
+    })),
+
+  addJoinRequest: (member) =>
+    set((state) => {
+      const pending = state.project.pendingRequests || []
+      const exists = pending.some((r) => r.id === member.id)
+      if (exists) return {}
+      return {
+        project: {
+          ...state.project,
+          pendingRequests: [...pending, member],
+        },
+      }
+    }),
+
+  acceptJoinRequest: (memberId) =>
+    set((state) => {
+      const pending = state.project.pendingRequests || []
+      const request = pending.find((r) => r.id === memberId)
+      if (!request) return {}
+      const members = [...state.project.members, {
+        id: request.id,
+        name: request.name,
+        avatar: request.avatar,
+        role: request.role || 'Contributor',
+        tag: 'New Member',
+      }]
+      return {
+        project: {
+          ...state.project,
+          members,
+          totalMembersCount: state.project.totalMembersCount + 1,
+          pendingRequests: pending.filter((r) => r.id !== memberId),
+        },
+      }
+    }),
+
+  declineJoinRequest: (memberId) =>
+    set((state) => ({
+      project: {
+        ...state.project,
+        pendingRequests: (state.project.pendingRequests || []).filter((r) => r.id !== memberId),
+      },
+    })),
 }))

@@ -3,5 +3,5 @@ import LoginPage from "../features/login/LoginPage.jsx";
 
 export default function Login() {
   const navigate = useNavigate();
-  return <LoginPage onSignUpClick={() => navigate("/")} />;
+  return <LoginPage onSignUpClick={() => navigate("/signup")} />;
 }

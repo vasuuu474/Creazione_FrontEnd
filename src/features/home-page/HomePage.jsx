@@ -2,7 +2,6 @@ import { useMemo, useState } from "react";
 import Navbar from "./components/layout/Navbar";
 import SearchBar from "./components/filters/SearchBar";
 import CategoryFilter from "./components/filters/CategoryFilter";
-import StatusFilter from "./components/filters/StatusFilter";
 import ProjectList from "./components/project/ProjectList";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -16,14 +15,12 @@ import {
 import {
   projects,
   categories,
-  statusOptions,
   sortOptions,
 } from "./data/projects";
 
 export default function HomePage() {
   const [search, setSearch] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("Technology");
-  const [selectedStatus, setSelectedStatus] = useState("");
+  const [selectedCategories, setSelectedCategories] = useState(["All"]);
   const [sortBy, setSortBy] = useState("trending");
 
   const filteredProjects = useMemo(() => {
@@ -33,16 +30,41 @@ export default function HomePage() {
         project.title.toLowerCase().includes(search.toLowerCase()) ||
         project.description.toLowerCase().includes(search.toLowerCase());
 
-      const matchesStatus = selectedStatus === "" || project.status === selectedStatus;
+      const matchesCategory = () => {
+        if (selectedCategories.includes("All")) return true;
+        const mapping = {
+          Technology: ["BLOCKCHAIN", "OPEN SOURCE", "EDTECH"],
+          Finance: ["FINTECH"],
+          Healthcare: ["HEALTHTECH"],
+          Design: ["DESIGN"],
+          Marketing: ["MARKETING"]
+        };
+        return selectedCategories.some((cat) => {
+          const tags = mapping[cat] || [];
+          return project.category.some((projTag) =>
+            tags.includes(projTag.toUpperCase())
+          );
+        });
+      };
 
-      return matchesSearch && matchesStatus;
+      return matchesSearch && matchesCategory();
     });
-  }, [search, selectedStatus]);
+  }, [search, selectedCategories]);
+
+  const sortedProjects = useMemo(() => {
+    const list = [...filteredProjects];
+    if (sortBy === "trending" || sortBy === "most-joined") {
+      return list.sort((a, b) => b.members - a.members);
+    }
+    if (sortBy === "newest") {
+      return list.sort((a, b) => b.id - a.id);
+    }
+    return list;
+  }, [filteredProjects, sortBy]);
 
   const handleResetFilters = () => {
     setSearch("");
-    setSelectedCategory("Technology");
-    setSelectedStatus("");
+    setSelectedCategories(["All"]);
     setSortBy("trending");
   };
 
@@ -56,14 +78,22 @@ export default function HomePage() {
             <CardContent className="space-y-6 p-6">
               <SearchBar value={search} onChange={setSearch} />
               <CategoryFilter
-                categories={categories}
-                selected={selectedCategory}
-                onSelect={setSelectedCategory}
-              />
-              <StatusFilter
-                value={selectedStatus}
-                onChange={setSelectedStatus}
-                options={statusOptions}
+                categories={["All", ...categories]}
+                selected={selectedCategories}
+                onSelect={(category) => {
+                  setSelectedCategories((prev) => {
+                    if (category === "All") {
+                      return ["All"];
+                    }
+                    const next = prev.filter((c) => c !== "All");
+                    if (next.includes(category)) {
+                      const updated = next.filter((c) => c !== category);
+                      return updated.length === 0 ? ["All"] : updated;
+                    } else {
+                      return [...next, category];
+                    }
+                  });
+                }}
               />
               <Button
                 variant="outline"
@@ -113,7 +143,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          <ProjectList projects={filteredProjects} />
+          <ProjectList projects={sortedProjects} />
         </main>
       </div>
     </div>

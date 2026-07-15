@@ -13,6 +13,9 @@ import {
   SelectValue,
 } from "../../../../components/ui/select";
 
+import { useAuthStore } from "@/store/useAuthStore";
+import { useProfileStore } from "@/store/useProfileStore";
+
 export default function SignUpForm({ onLoginClick }) {
   const [showPassword, setShowPassword] = useState(false);
   const [form, setForm] = useState({
@@ -40,6 +43,24 @@ export default function SignUpForm({ onLoginClick }) {
     e.preventDefault();
     console.log("Form Submitted:", form);
     const fullName = `${form.firstName}${form.middleName ? ' ' + form.middleName : ''}${form.lastName ? ' ' + form.lastName : ''}`;
+    const email = form.email;
+    const phone = `${form.countryCode} ${form.phone}`;
+
+    // Update auth store
+    useAuthStore.getState().setUser({
+      name: fullName,
+      email: email,
+      role: "UX Strategy",
+      avatar: useAuthStore.getState().currentUser.avatar,
+    });
+
+    // Update profile store
+    useProfileStore.getState().saveProfileEdits({
+      name: fullName,
+      email: email,
+      phone: phone,
+    });
+
     alert(`Account created successfully for ${fullName}!`);
     navigate("/details");
   };

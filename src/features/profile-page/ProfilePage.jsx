@@ -3,7 +3,6 @@ import ProfileHeader from './components/layout/ProfileHeader'
 import ProfileSidebar from './components/layout/ProfileSidebar'
 import BioCard from './components/profile/BioCard'
 import ProjectsCard from './components/profile/ProjectsCard'
-import ExpertiseCard from './components/profile/ExpertiseCard'
 import Toast from './components/Toast'
 
 // Modals
@@ -23,7 +22,6 @@ import { useProjectsActions } from './hooks/useProjectsActions'
 
 // Stores
 import { useUIStore } from '@/store/useUIStore'
-import { useProfileStore } from '@/store/useProfileStore'
 
 export default function ProfilePage() {
   const activeModal = useUIStore((state) => state.activeModal)
@@ -45,14 +43,7 @@ export default function ProfilePage() {
     handleToggleVisibility,
   } = useProjectsActions()
 
-  // Expertise state from store
-  const expertise = useProfileStore((state) => state.expertise)
-  const updateExpertise = useProfileStore((state) => state.updateExpertise)
 
-  const handleUpdateExpertise = (updatedExpertise) => {
-    updateExpertise(updatedExpertise)
-    showToast('Expertise progression updated successfully.')
-  }
 
   const handleCreateIdea = (ideaForm) => {
     closeModal()
@@ -97,12 +88,6 @@ export default function ProfilePage() {
               projects={projects}
               onToggleVisibility={handleToggleVisibility}
               onAddProjectClick={requestAddProject}
-            />
-
-            {/* Expertise progression card */}
-            <ExpertiseCard
-              expertise={expertise}
-              onUpdateExpertise={handleUpdateExpertise}
             />
           </div>
 

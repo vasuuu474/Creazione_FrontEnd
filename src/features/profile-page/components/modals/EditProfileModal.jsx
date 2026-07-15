@@ -80,22 +80,8 @@ export default function EditProfileModal({ isOpen, profile, onClose, onSubmit })
             />
           </div>
 
-          {/* Profile Title */}
-          <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-semibold text-primary dark:text-white">
-              Job Title / Subtitle
-            </label>
-            <input
-              type="text"
-              value={profileForm.title}
-              onChange={(e) =>
-                setProfileForm({ ...profileForm, title: e.target.value })
-              }
-              placeholder="E.g., Senior Systems Architect • 12+ Years Exp."
-              className="w-full bg-[#f8f9fc] dark:bg-zinc-800 text-[#191c1e] dark:text-white border border-input px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-primary dark:focus:ring-white"
-              required
-            />
-          </div>
+
+
 
           {/* Location */}
           <div className="flex flex-col gap-1.5">

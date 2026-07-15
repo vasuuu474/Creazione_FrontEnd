@@ -5,6 +5,7 @@ import ProjectScopeCard from './components/project/ProjectScopeCard'
 import FounderCard from './components/project/FounderCard'
 import TeamCard from './components/project/TeamCard'
 import StackTagsCard from './components/project/StackTagsCard'
+import PendingRequestsCard from './components/project/PendingRequestsCard'
 import EditWorkspaceHeaderForm from './components/EditWorkspaceHeaderForm'
 import Toast from './components/Toast'
 import CreateIdeaModal from './components/modals/CreateIdeaModal'
@@ -17,6 +18,7 @@ import { useProjectStore } from '@/store/useProjectStore'
 import { useMembersStore } from '@/store/useMembersStore'
 import { useHeaderEditing } from './hooks/useHeaderEditing'
 import { useTeamActions } from './hooks/useTeamActions'
+import { useIsFounder } from './hooks/useIsFounder'
 
 export default function WorkspacePage() {
   const activeView = useUIStore((state) => state.activeView)
@@ -25,6 +27,7 @@ export default function WorkspacePage() {
   const openModal = useUIStore((state) => state.openModal)
   const closeModal = useUIStore((state) => state.closeModal)
   const showToast = useUIStore((state) => state.showToast)
+  const isFounder = useIsFounder()
 
   const { isEditingHeader, headerEditDraft, setHeaderEditDraft, stopEditHeader } = useHeaderEditing()
 
@@ -102,6 +105,9 @@ export default function WorkspacePage() {
                     avatar={project.founder.avatar}
                     onContactClick={() => openModal('contact-founder')}
                   />
+
+                  {/* Render Pending Join Requests Card for Founder */}
+                  {isFounder && <PendingRequestsCard />}
 
                   <TeamCard
                     members={project.members}

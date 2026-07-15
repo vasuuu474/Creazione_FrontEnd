@@ -1,7 +1,6 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { Bell, ChevronDown, LogOut, User, Settings, Users } from 'lucide-react'
-import Logo from '@/components/common/Logo'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,6 +19,7 @@ export default function Navbar() {
   const navigate = useNavigate()
   const currentUser = useAuthStore((state) => state.currentUser)
   const switchUser = useAuthStore((state) => state.switchUser)
+  const logout = useAuthStore((state) => state.logout)
   const founderEmail = useProjectStore((state) => state.project.founder.email)
   const showToast = useUIStore((state) => state.showToast)
   const isFounder = useIsFounder()
@@ -43,30 +43,35 @@ export default function Navbar() {
       showToast(`Logged in as ${next.name} (Project Founder)!`)
     } else {
       stopEditHeader()
-      showToast(`Logged in as ${next.name} (${next.role})!`)
+      showToast(`Logged in as ${next.name}!`)
     }
   }
 
-  return (
-    <header className="sticky top-0 z-40 w-full border-b border-brand-border bg-white/80 backdrop-blur-md">
-      <div className="flex h-16 items-center justify-between px-6 max-w-[1400px] mx-auto">
+  const handleLogout = () => {
+    logout()
+    navigate("/")
+    showToast("Logged out successfully!")
+  }
 
-        {/* Left Section - Logo */}
-        <div className="flex items-center gap-8">
-          <Logo />
-          <nav className="hidden md:flex items-center gap-6 h-16">
-            <a
-              href="#explore"
-              className="text-sm font-medium text-brand-text-muted hover:text-brand-primary transition-colors h-full flex items-center px-1"
-            >
-              Explore
-            </a>
-            <a
-              href="#home"
-              className="text-sm font-semibold text-brand-primary border-b-2 border-brand-primary h-full flex items-center px-1"
+  return (
+    <header className="sticky top-0 z-40 w-full bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md border-b border-border dark:border-zinc-800 shadow-sm">
+      <div className="max-w-[1280px] mx-auto px-4 md:px-12 h-16 flex items-center justify-between">
+
+        {/* Left Section: Logo & Navigation */}
+        <div className="flex items-center gap-8 md:gap-12">
+          {/* Logo */}
+          <Link to="/home" className="font-heading text-xl font-bold tracking-tight text-primary dark:text-[#b4cdb8] hover:opacity-90 transition-opacity">
+            Creazione
+          </Link>
+
+          {/* Navigation Links */}
+          <nav className="flex items-center gap-6">
+            <Link
+              to="/home"
+              className="font-sans text-sm font-semibold text-primary dark:text-[#b4cdb8] hover:text-[#061b0e] dark:hover:text-white transition-colors relative after:absolute after:bottom-[-20px] after:left-0 after:w-full after:h-[2px] after:bg-primary dark:after:bg-[#b4cdb8]"
             >
               Home
-            </a>
+            </Link>
           </nav>
         </div>
 
@@ -76,13 +81,10 @@ export default function Navbar() {
           {/* Notifications Dropdown */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="relative p-2 text-gray-500 hover:text-brand-primary hover:bg-gray-100 rounded-full transition-all duration-200 cursor-pointer">
-                <Bell className="w-5 h-5" />
+              <button className="relative p-1.5 text-muted-foreground hover:text-foreground hover:bg-muted rounded-full transition-colors cursor-pointer" aria-label="Notifications">
+                <Bell className="size-5" />
                 {unreadCount > 0 && (
-                  <span className="absolute top-1.5 right-1.5 flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
-                  </span>
+                  <span className="absolute top-1 right-1 size-2 bg-[#ba1a1a] rounded-full ring-2 ring-white" />
                 )}
               </button>
             </DropdownMenuTrigger>
@@ -149,9 +151,6 @@ export default function Navbar() {
               <div className="px-2 py-2">
                 <p className="text-xs font-semibold text-brand-text">{currentUser.name}</p>
                 <p className="text-[10px] text-brand-text-muted">{currentUser.email}</p>
-                <span className="inline-block bg-[#e8efff] text-[#2563eb] text-[9px] font-bold px-1.5 py-0.5 rounded-[4px] mt-1 uppercase">
-                  {currentUser.role}
-                </span>
               </div>
               <DropdownMenuSeparator className="bg-brand-border" />
 
@@ -185,7 +184,10 @@ export default function Navbar() {
 
               <DropdownMenuSeparator className="bg-brand-border" />
 
-              <DropdownMenuItem className="flex items-center gap-2 text-xs py-2 text-red-600 hover:bg-red-50 hover:text-red-700 rounded-md cursor-pointer">
+              <DropdownMenuItem
+                onClick={handleLogout}
+                className="flex items-center gap-2 text-xs py-2 text-red-600 hover:bg-red-50 hover:text-red-700 rounded-md cursor-pointer"
+              >
                 <LogOut className="w-4 h-4" />
                 <span>Log out</span>
               </DropdownMenuItem>

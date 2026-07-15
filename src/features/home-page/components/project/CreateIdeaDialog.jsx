@@ -117,7 +117,7 @@ export default function CreateIdeaDialog({ children }) {
         <form onSubmit={handleSubmit}>
           <DialogHeader className="border-b border-border px-6 py-5">
             <DialogTitle className="font-heading text-xl font-bold">
-              Pitch a New Idea
+              Create a New Idea
             </DialogTitle>
           </DialogHeader>
 

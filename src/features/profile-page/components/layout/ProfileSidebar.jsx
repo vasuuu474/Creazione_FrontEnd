@@ -33,12 +33,9 @@ export default function ProfileSidebar({
         </div>
 
         {/* Name & Title */}
-        <h2 className="font-serif text-2xl font-semibold text-foreground dark:text-[#d0e9d4] text-center mb-1">
+        <h2 className="font-serif text-2xl font-semibold text-foreground dark:text-[#d0e9d4] text-center mb-6">
           {profile.name}
         </h2>
-        <p className="text-xs md:text-sm italic text-muted-foreground text-center mb-6">
-          {profile.title}
-        </p>
 
         {/* Contact Info */}
         <div className="w-full flex flex-col gap-3.5 mb-6 text-sm text-[#6B7280] dark:text-gray-300 min-w-0">
@@ -80,15 +77,19 @@ export default function ProfileSidebar({
 
           {/* Languages Chips */}
           <div className="flex flex-wrap gap-2.5">
-            {languages.map((lang, idx) => (
-              <div 
-                key={idx} 
-                className="bg-[#f0f3ff] dark:bg-[#272c2c] text-primary dark:text-gray-200 rounded-[4px] px-3.5 py-1.5 text-xs text-center border border-border/40 min-w-[90px] flex flex-col justify-center"
-              >
-                <span className="font-semibold">{lang.name}</span>
-                <span className="text-[10px] text-muted-foreground">({lang.level})</span>
-              </div>
-            ))}
+            {languages.length === 0 ? (
+              <span className="text-xs text-muted-foreground italic py-1">No languages added</span>
+            ) : (
+              languages.map((lang, idx) => (
+                <div 
+                  key={idx} 
+                  className="bg-[#f0f3ff] dark:bg-[#272c2c] text-primary dark:text-gray-200 rounded-[4px] px-3.5 py-1.5 text-xs text-center border border-border/40 min-w-[90px] flex flex-col justify-center"
+                >
+                  <span className="font-semibold">{lang.name}</span>
+                  <span className="text-[10px] text-muted-foreground">({lang.level})</span>
+                </div>
+              ))
+            )}
           </div>
         </div>
 
@@ -111,14 +112,18 @@ export default function ProfileSidebar({
 
         {/* Skills Tags */}
         <div className="flex flex-wrap gap-2">
-          {skills.map((skill, idx) => (
-            <span 
-              key={idx} 
-              className="bg-primary text-white hover:bg-[#355B44] text-[11px] font-semibold px-2.5 py-1.5 rounded-[4px] transition-colors cursor-pointer"
-            >
-              {skill}
-            </span>
-          ))}
+          {skills.length === 0 ? (
+            <span className="text-xs text-muted-foreground italic py-1">No skills added</span>
+          ) : (
+            skills.map((skill, idx) => (
+              <span 
+                key={idx} 
+                className="bg-primary text-white hover:bg-[#355B44] text-[11px] font-semibold px-2.5 py-1.5 rounded-[4px] transition-colors cursor-pointer"
+              >
+                {skill}
+              </span>
+            ))
+          )}
         </div>
       </div>
 

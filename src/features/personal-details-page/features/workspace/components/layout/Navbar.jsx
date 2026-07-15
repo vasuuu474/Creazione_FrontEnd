@@ -41,7 +41,7 @@ export default function Navbar() {
       showToast(`Logged in as ${next.name} (Project Founder)!`)
     } else {
       stopEditHeader()
-      showToast(`Logged in as ${next.name} (${next.role})!`)
+      showToast(`Logged in as ${next.name} !`)
     }
   }
 

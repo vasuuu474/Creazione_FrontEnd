@@ -8,7 +8,7 @@ export default function CategoryFilter({ categories, selected, onSelect }) {
       </h3>
       <div className="flex flex-wrap gap-2">
         {categories.map((category) => {
-          const isSelected = selected === category;
+          const isSelected = selected.includes(category);
           return (
             <button
               key={category}

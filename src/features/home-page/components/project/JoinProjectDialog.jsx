@@ -25,7 +25,8 @@ export default function JoinProjectDialog({
 }) {
   const navigate = useNavigate();
   const currentUser = useAuthStore((state) => state.currentUser);
-  const addMemberToProjectIfRoom = useProjectStore((state) => state.addMemberToProjectIfRoom);
+  const addJoinRequest = useProjectStore((state) => state.addJoinRequest);
+  const joinProjectUpdateStore = useProjectStore((state) => state.joinProjectUpdateStore);
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -36,18 +37,15 @@ export default function JoinProjectDialog({
       setIsLoading(false);
       setOpen(false);
       toast.success("Your request has been sent successfully!");
-      // NOTE: member shape here is a best guess (id/name/avatar/role) based
-      // on how TeamCard/FounderCard render project.founder elsewhere - we
-      // haven't seen TeamCard.jsx's source, so double check this matches
-      // once that file is available.
-      addMemberToProjectIfRoom({
+      
+      joinProjectUpdateStore(ideaName, description, skillsNeeded);
+
+      addJoinRequest({
         id: currentUser.email,
         name: currentUser.name,
         avatar: currentUser.avatar,
         role: currentUser.role,
       });
-      // currentUser is not this project's founder, so Workspace will
-      // automatically render the member view via useIsFounder().
       navigate("/workspace");
     }, 1200);
   };

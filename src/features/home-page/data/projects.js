@@ -27,7 +27,7 @@ export const projects = [
       "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop",
       "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop",
     ],
-    bookmarked: true,
+    bookmarked: false,
     skillsNeeded: ["Python", "AI/ML", "TensorFlow", "React", "UI/UX"],
   },
   {

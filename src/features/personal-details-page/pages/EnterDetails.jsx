@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "@/store/useAuthStore";
+import { useProfileStore } from "@/store/useProfileStore";
 
 export default function EnterDetails() {
   const navigate = useNavigate();
@@ -253,6 +255,23 @@ export default function EnterDetails() {
                       return;
                     }
                     setErrors({});
+
+                    // Update profile store
+                    useProfileStore.getState().saveProfileEdits({
+                      name: fullName,
+                      location: location,
+                    });
+                    useProfileStore.getState().saveBio(bio);
+                    useProfileStore.getState().saveSkills(selectedSkills);
+                    useProfileStore.getState().saveLanguages(selectedLanguages.map(l => ({ name: l, level: 'Native' })));
+
+                    // Update auth store
+                    const currentUser = useAuthStore.getState().currentUser;
+                    useAuthStore.getState().setUser({
+                      ...currentUser,
+                      name: fullName,
+                    });
+
                     navigate("/home");
                   }}
                   className="bg-[#1b3022] hover:bg-[#122017] text-white px-5 py-2 rounded-lg text-sm font-semibold transition-colors cursor-pointer"

@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { initialProfileData } from '@/data/mock/profileData'
 import { getProfile, updateProfile } from '@/api/endpoints/profileApi'
+import { useAuthStore } from '@/store/useAuthStore'
 
 export const useProfileStore = create((set, get) => ({
   profile: initialProfileData.profile,
@@ -19,14 +20,32 @@ export const useProfileStore = create((set, get) => ({
       const data = await getProfile()
       set({ ...data, status: 'idle' })
     } catch {
-      // fallback to mock data
-      set({ status: 'idle' })
+      // Fallback: Populate data from the active currentUser in useAuthStore
+      const user = useAuthStore.getState().currentUser
+      if (user) {
+        set({
+          profile: {
+            name: user.name || '',
+            email: user.email || '',
+            phone: user.phone || '',
+            location: user.location || '',
+            avatar: user.avatar || '',
+          },
+          bioText: user.bioText || '',
+          languages: user.languages || [],
+          skills: user.skills || [],
+          status: 'idle',
+        })
+      } else {
+        set({ status: 'idle' })
+      }
     }
   },
 
   saveProfileEdits: async (edits) => {
     const nextProfile = { ...get().profile, ...edits }
     set({ profile: nextProfile })
+    useAuthStore.getState().setUser(edits)
     try {
       await updateProfile({ profile: nextProfile })
     } catch (err) {
@@ -36,6 +55,7 @@ export const useProfileStore = create((set, get) => ({
 
   saveBio: async (bioText) => {
     set({ bioText })
+    useAuthStore.getState().setUser({ bioText })
     try {
       await updateProfile({ bioText })
     } catch (err) {
@@ -45,6 +65,7 @@ export const useProfileStore = create((set, get) => ({
 
   saveLanguages: async (languages) => {
     set({ languages })
+    useAuthStore.getState().setUser({ languages })
     try {
       await updateProfile({ languages })
     } catch (err) {
@@ -54,6 +75,7 @@ export const useProfileStore = create((set, get) => ({
 
   saveSkills: async (skills) => {
     set({ skills })
+    useAuthStore.getState().setUser({ skills })
     try {
       await updateProfile({ skills })
     } catch (err) {
@@ -68,7 +90,35 @@ export const useProfileStore = create((set, get) => ({
     const projectsList = get().projectsList
     const nextProjects = {
       ...projectsList,
-      [activeTab]: [...projectsList[activeTab], project],
+      [activeTab]: [...(projectsList[activeTab] || []), project],
+    }
+    set({ projectsList: nextProjects })
+    try {
+      await updateProfile({ projectsList: nextProjects })
+    } catch (err) {
+      set({ error: err.message })
+    }
+  },
+
+  toggleSaveProject: async (project) => {
+    const projectsList = get().projectsList
+    const saved = projectsList.saved || []
+    const exists = saved.some((p) => p.id === project.id)
+    const updatedSaved = exists
+      ? saved.filter((p) => p.id !== project.id)
+      : [
+          ...saved,
+          {
+            id: project.id,
+            title: project.title,
+            description: project.description,
+            isPublic: true,
+            iconType: "default",
+          },
+        ]
+    const nextProjects = {
+      ...projectsList,
+      saved: updatedSaved,
     }
     set({ projectsList: nextProjects })
     try {
@@ -105,3 +155,22 @@ export const useProfileStore = create((set, get) => ({
     }
   },
 }))
+
+// Auto-sync useProfileStore state with useAuthStore's currentUser
+useAuthStore.subscribe((state) => {
+  const user = state.currentUser
+  if (user) {
+    useProfileStore.setState({
+      profile: {
+        name: user.name || '',
+        email: user.email || '',
+        phone: user.phone || '',
+        location: user.location || '',
+        avatar: user.avatar || '',
+      },
+      bioText: user.bioText || '',
+      languages: user.languages || [],
+      skills: user.skills || [],
+    })
+  }
+})

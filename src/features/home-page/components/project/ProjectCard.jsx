@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Bookmark } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -13,9 +12,12 @@ import {
 } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import JoinProjectDialog from "./JoinProjectDialog";
+import { useProfileStore } from "@/store/useProfileStore";
 
 export default function ProjectCard({ project }) {
-  const [bookmarked, setBookmarked] = useState(project.bookmarked);
+  const savedProjects = useProfileStore((state) => state.projectsList.saved || []);
+  const toggleSaveProject = useProfileStore((state) => state.toggleSaveProject);
+  const bookmarked = savedProjects.some((p) => p.id === project.id);
 
   return (
     <Card className="rounded-2xl border border-border bg-white shadow-sm transition-shadow hover:shadow-md">
@@ -39,7 +41,7 @@ export default function ProjectCard({ project }) {
           </div>
           <button
             type="button"
-            onClick={() => setBookmarked(!bookmarked)}
+            onClick={() => toggleSaveProject(project)}
             className="text-muted-foreground transition-colors hover:text-foreground"
             aria-label={bookmarked ? "Remove bookmark" : "Bookmark project"}
           >

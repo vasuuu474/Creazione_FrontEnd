@@ -17,7 +17,7 @@ export default function LoginForm({ onSignUpClick }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Logged in with:", email);
-    navigate("/details");
+    navigate("/home");
   };
 
   return (

@@ -10,7 +10,8 @@ export default function ProjectsCard({
   const tabs = [
     { id: "created", label: "Projects Created" },
     { id: "worked", label: "Projects Worked On" },
-    { id: "invested", label: "Projects Invested" }
+    { id: "invested", label: "Projects Invested" },
+    { id: "saved", label: "Saved Projects" }
   ];
 
   const getIcon = (type) => {
@@ -83,34 +84,38 @@ export default function ProjectsCard({
               </div>
 
               {/* Right Side: Visibility Toggle */}
-              <button
-                type="button"
-                onClick={() => onToggleVisibility(project.id)}
-                title={project.isPublic ? "Set to Private" : "Set to Public"}
-                className={`ml-3 p-2 rounded-lg border transition-all cursor-pointer shrink-0 ${
-                  project.isPublic
-                    ? "border-border text-muted-foreground hover:border-primary hover:text-primary dark:hover:border-white dark:hover:text-white"
-                    : "border-dashed border-border text-muted-foreground/50 hover:border-primary hover:text-primary dark:hover:border-white dark:hover:text-white"
-                }`}
-              >
-                {project.isPublic
-                  ? <Eye className="size-4" />
-                  : <EyeOff className="size-4" />
-                }
-              </button>
+              {activeTab !== 'saved' && (
+                <button
+                  type="button"
+                  onClick={() => onToggleVisibility(project.id)}
+                  title={project.isPublic ? "Set to Private" : "Set to Public"}
+                  className={`ml-3 p-2 rounded-lg border transition-all cursor-pointer shrink-0 ${
+                    project.isPublic
+                      ? "border-border text-muted-foreground hover:border-primary hover:text-primary dark:hover:border-white dark:hover:text-white"
+                      : "border-dashed border-border text-muted-foreground/50 hover:border-primary hover:text-primary dark:hover:border-white dark:hover:text-white"
+                  }`}
+                >
+                  {project.isPublic
+                    ? <Eye className="size-4" />
+                    : <EyeOff className="size-4" />
+                  }
+                </button>
+              )}
 
             </div>
           ))
         )}
 
         {/* Add New Project Card */}
-        <button
-          onClick={onAddProjectClick}
-          className="w-full flex items-center justify-center gap-2 py-4 border-2 border-dashed border-border hover:border-primary dark:hover:border-[#355B44] rounded-xl hover:bg-muted/40 transition-all duration-200 cursor-pointer group text-sm md:text-base font-semibold text-primary dark:text-white"
-        >
-          <Plus className="size-5 group-hover:rotate-90 transition-transform text-primary dark:text-white" />
-          <span>Add New Project</span>
-        </button>
+        {activeTab === 'created' && (
+          <button
+            onClick={onAddProjectClick}
+            className="w-full flex items-center justify-center gap-2 py-4 border-2 border-dashed border-border hover:border-primary dark:hover:border-[#355B44] rounded-xl hover:bg-muted/40 transition-all duration-200 cursor-pointer group text-sm md:text-base font-semibold text-primary dark:text-white"
+          >
+            <Plus className="size-5 group-hover:rotate-90 transition-transform text-primary dark:text-white" />
+            <span>Create New Project</span>
+          </button>
+        )}
 
       </div>
 
