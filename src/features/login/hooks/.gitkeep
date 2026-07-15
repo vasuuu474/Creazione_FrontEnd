@@ -1,0 +1,3 @@
+// Feature-specific hooks for login
+// Add hooks here that compose store state into login-specific logic
+// Example: useAuthState.js, useLoginForm.js, etc.
