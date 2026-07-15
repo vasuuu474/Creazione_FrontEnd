@@ -1,4 +1,3 @@
-import React from "react";
 import { Bell } from "lucide-react";
 import alexAvatar from "@/assets/alex_sterling_avatar.jpg";
 

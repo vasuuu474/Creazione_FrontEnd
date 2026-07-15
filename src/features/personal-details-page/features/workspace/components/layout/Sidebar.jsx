@@ -1,4 +1,3 @@
-import React from 'react'
 import { LayoutDashboard, Users, Settings, HelpCircle } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useUIStore } from '@/store/useUIStore'

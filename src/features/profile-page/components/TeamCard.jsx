@@ -1,5 +1,4 @@
-import React from "react";
-import { Plus, UserPlus, Pencil, Trash2 } from "lucide-react";
+import { UserPlus, Pencil, Trash2 } from "lucide-react";
 
 export default function TeamCard({ members, onAddClick, onEditClick, onDeleteClick }) {
   return (

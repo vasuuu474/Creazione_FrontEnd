@@ -1,4 +1,3 @@
-import React from 'react'
 
 import ProfileHeader from './components/layout/ProfileHeader'
 import ProfileSidebar from './components/layout/ProfileSidebar'

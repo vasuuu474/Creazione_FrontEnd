@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -12,14 +12,6 @@ export default function AddProjectModal({ isOpen, activeTab, onClose, onSubmit }
   const [isPublic, setIsPublic] = useState(true)
   const [iconType, setIconType] = useState('network')
 
-  useEffect(() => {
-    if (isOpen) {
-      setTitle('')
-      setDescription('')
-      setIsPublic(true)
-      setIconType('network')
-    }
-  }, [isOpen])
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -86,6 +78,18 @@ export default function AddProjectModal({ isOpen, activeTab, onClose, onSubmit }
               <option value="shield">Shield/Security</option>
               <option value="default">Folder/Git</option>
             </select>
+          </div>
+          <div className="flex items-center gap-3">
+            <input
+              type="checkbox"
+              id="add-project-public"
+              checked={isPublic}
+              onChange={(e) => setIsPublic(e.target.checked)}
+              className="w-4 h-4 accent-primary cursor-pointer"
+            />
+            <label htmlFor="add-project-public" className="text-xs font-semibold text-muted-foreground uppercase cursor-pointer">
+              Make project public
+            </label>
           </div>
           <div className="flex justify-end gap-3 mt-2 border-t border-border pt-4">
             <button

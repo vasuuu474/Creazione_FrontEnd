@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -9,11 +9,6 @@ import {
 export default function EditBioModal({ isOpen, bioText, onClose, onSubmit }) {
   const [tempBioText, setTempBioText] = useState(bioText)
 
-  useEffect(() => {
-    if (isOpen) {
-      setTempBioText(bioText)
-    }
-  }, [isOpen, bioText])
 
   const handleSubmit = (e) => {
     e.preventDefault()

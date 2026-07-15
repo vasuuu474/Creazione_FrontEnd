@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Bell, ChevronDown, LogOut, User, Settings, Users } from 'lucide-react'
 import Logo from '@/components/common/Logo'
 import {

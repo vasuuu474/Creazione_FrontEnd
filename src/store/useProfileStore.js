@@ -18,7 +18,7 @@ export const useProfileStore = create((set, get) => ({
     try {
       const data = await getProfile()
       set({ ...data, status: 'idle' })
-    } catch (err) {
+    } catch {
       // fallback to mock data
       set({ status: 'idle' })
     }

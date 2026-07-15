@@ -1,5 +1,4 @@
-import React from "react";
-import { Network, Shield, FolderGit2, Plus } from "lucide-react";
+import { Network, Shield, FolderGit2, Plus, Eye, EyeOff } from "lucide-react";
 
 export default function ProjectsCard({
   activeTab,
@@ -83,7 +82,22 @@ export default function ProjectsCard({
                 </div>
               </div>
 
-
+              {/* Right Side: Visibility Toggle */}
+              <button
+                type="button"
+                onClick={() => onToggleVisibility(project.id)}
+                title={project.isPublic ? "Set to Private" : "Set to Public"}
+                className={`ml-3 p-2 rounded-lg border transition-all cursor-pointer shrink-0 ${
+                  project.isPublic
+                    ? "border-border text-muted-foreground hover:border-primary hover:text-primary dark:hover:border-white dark:hover:text-white"
+                    : "border-dashed border-border text-muted-foreground/50 hover:border-primary hover:text-primary dark:hover:border-white dark:hover:text-white"
+                }`}
+              >
+                {project.isPublic
+                  ? <Eye className="size-4" />
+                  : <EyeOff className="size-4" />
+                }
+              </button>
 
             </div>
           ))

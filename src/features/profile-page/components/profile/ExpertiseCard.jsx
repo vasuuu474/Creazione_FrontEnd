@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Pencil, Check } from "lucide-react";
 
 export default function ExpertiseCard({ expertise, onUpdateExpertise }) {

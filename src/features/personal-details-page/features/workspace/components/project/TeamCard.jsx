@@ -1,4 +1,3 @@
-import React from 'react'
 import TeamMember from './TeamMember'
 import { Button } from '@/components/ui/button'
 

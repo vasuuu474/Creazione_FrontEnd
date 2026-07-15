@@ -2,7 +2,7 @@ export default function LeftPanel() {
   return (
     <div className="hidden lg:flex w-1/2 bg-gradient-to-br from-emerald-700 to-emerald-900 text-white p-12 flex-col justify-between">
       <div>
-        <h1 className="text-4xl font-bold">CollabHub</h1>
+        <h1 className="text-4xl font-bold">Creazione</h1>
         <p className="mt-3 text-emerald-100">
           Collaborate. Create. Grow.
         </p>
@@ -26,7 +26,7 @@ export default function LeftPanel() {
       </div>
 
       <p className="text-sm text-emerald-200">
-        © 2026 CollabHub. All rights reserved.
+        © 2026 Creazione. All rights reserved.
       </p>
     </div>
   );

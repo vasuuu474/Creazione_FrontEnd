@@ -1,4 +1,3 @@
-import React from 'react'
 import { useUIStore } from '@/store/useUIStore'
 
 export default function Toast() {

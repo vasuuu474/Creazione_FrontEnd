@@ -1,4 +1,3 @@
-import React from "react";
 import { Pencil } from "lucide-react";
 
 export default function DetailedScopeCard({ scopeText, onEditClick }) {

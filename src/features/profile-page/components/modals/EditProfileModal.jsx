@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -9,11 +9,6 @@ import {
 export default function EditProfileModal({ isOpen, profile, onClose, onSubmit }) {
   const [profileForm, setProfileForm] = useState({ ...profile })
 
-  useEffect(() => {
-    if (isOpen) {
-      setProfileForm({ ...profile })
-    }
-  }, [isOpen, profile])
 
   const handleFileChange = (e) => {
     const file = e.target.files[0]

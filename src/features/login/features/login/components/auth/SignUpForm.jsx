@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 import { Button } from "../../../../components/ui/button";
 import { Input } from "../../../../components/ui/input";
@@ -33,11 +34,14 @@ export default function SignUpForm({ onLoginClick }) {
     setForm((prev) => ({ ...prev, countryCode: value }));
   };
 
+  const navigate = useNavigate();
+
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Form Submitted:", form);
     const fullName = `${form.firstName}${form.middleName ? ' ' + form.middleName : ''}${form.lastName ? ' ' + form.lastName : ''}`;
     alert(`Account created successfully for ${fullName}!`);
+    navigate("/details");
   };
 
   return (

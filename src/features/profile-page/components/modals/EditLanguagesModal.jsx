@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -8,17 +8,9 @@ import {
 import { Trash2 } from 'lucide-react'
 
 export default function EditLanguagesModal({ isOpen, languages, onClose, onSubmit }) {
-  const [tempLanguages, setTempLanguages] = useState([])
+  const [tempLanguages, setTempLanguages] = useState([...languages])
   const [newLangForm, setNewLangForm] = useState({ name: '', level: 'Basic' })
   const [errorToast, setErrorToast] = useState(null)
-
-  useEffect(() => {
-    if (isOpen) {
-      setTempLanguages([...languages])
-      setNewLangForm({ name: '', level: 'Basic' })
-      setErrorToast(null)
-    }
-  }, [isOpen, languages])
 
   const handleAddTempLanguage = () => {
     if (!newLangForm.name.trim()) {

@@ -1,4 +1,3 @@
-import React from "react";
 import { Mail, Pencil, Star } from "lucide-react";
 
 export default function FounderCard({ founder, onEditClick, onContactClick }) {

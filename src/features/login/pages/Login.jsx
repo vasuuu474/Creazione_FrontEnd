@@ -1,2 +1,7 @@
-// Thin re-export for Login page
-export { default } from "../features/login/LoginPage.jsx";
+import { useNavigate } from "react-router-dom";
+import LoginPage from "../features/login/LoginPage.jsx";
+
+export default function Login() {
+  const navigate = useNavigate();
+  return <LoginPage onSignUpClick={() => navigate("/")} />;
+}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -8,17 +8,9 @@ import {
 import { Trash2 } from 'lucide-react'
 
 export default function EditSkillsModal({ isOpen, skills, onClose, onSubmit }) {
-  const [tempSkills, setTempSkills] = useState([])
+  const [tempSkills, setTempSkills] = useState([...skills])
   const [newSkillForm, setNewSkillForm] = useState('')
   const [errorToast, setErrorToast] = useState(null)
-
-  useEffect(() => {
-    if (isOpen) {
-      setTempSkills([...skills])
-      setNewSkillForm('')
-      setErrorToast(null)
-    }
-  }, [isOpen, skills])
 
   const handleAddTempSkill = () => {
     if (!newSkillForm.trim()) {

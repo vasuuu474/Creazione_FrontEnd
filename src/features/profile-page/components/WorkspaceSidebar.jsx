@@ -1,4 +1,3 @@
-import React from "react";
 import { LayoutGrid, Users, HelpCircle } from "lucide-react";
 
 export default function WorkspaceSidebar({ activeTab, onTabChange }) {
