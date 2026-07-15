@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { X } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -15,6 +16,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
+import { useAuthStore } from "@/store/useAuthStore";
+import { useProjectStore } from "@/store/useProjectStore";
 
 const SUGGESTED_SKILLS = [
   "React",
@@ -34,6 +37,9 @@ const initialFormState = {
 };
 
 export default function CreateIdeaDialog({ children }) {
+  const navigate = useNavigate();
+  const currentUser = useAuthStore((state) => state.currentUser);
+  const publishIdea = useProjectStore((state) => state.publishIdea);
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState(initialFormState);
   const [errors, setErrors] = useState({});
@@ -89,17 +95,14 @@ export default function CreateIdeaDialog({ children }) {
     e.preventDefault();
     if (!validate()) return;
 
-    const payload = {
-      ideaName: form.ideaName.trim(),
-      description: form.description.trim(),
-      skills: form.skills,
-    };
-
-    console.log("New idea submitted:", payload);
+    // Sets the current user as this project's founder — Workspace's
+    // useIsFounder() will now return true for them, showing the founder UI.
+    publishIdea(form.ideaName.trim(), form.description.trim(), currentUser);
 
     setOpen(false);
     resetForm();
     toast.success("Idea posted successfully!");
+    navigate("/workspace");
   };
 
   const availableSuggestions = SUGGESTED_SKILLS.filter(

@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -8,6 +9,8 @@ const navLinks = [
 ];
 
 export default function Navbar() {
+  const navigate = useNavigate();
+
   return (
     <header className="sticky top-0 z-50 flex h-[70px] items-center justify-between border-b border-border bg-white px-4 md:px-8">
       <div className="flex items-center gap-8">
@@ -53,7 +56,10 @@ export default function Navbar() {
         >
           <Bell className="size-5" />
         </Button>
-        <Avatar className="size-9 cursor-pointer">
+        <Avatar
+          className="size-9 cursor-pointer"
+          onClick={() => navigate("/profile")}
+        >
           <AvatarImage
             src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&h=80&fit=crop"
             alt="User profile"
