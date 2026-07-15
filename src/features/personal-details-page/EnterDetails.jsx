@@ -1,6 +1,9 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function EnterDetails() {
+  const navigate = useNavigate();
+
   const [skills, setSkills] = useState([
     "Project Strategy",
     "Data Analysis",
@@ -240,7 +243,10 @@ export default function EnterDetails() {
                 Back
               </button>
 
-              <button className="bg-[#1b3022] text-white px-5 py-2 rounded-lg text-sm">
+              <button
+                onClick={() => navigate("/home")}
+                className="bg-[#1b3022] text-white px-5 py-2 rounded-lg text-sm"
+              >
                 Continue →
               </button>
             </div>
