@@ -7,8 +7,8 @@ import Login from "./features/login/pages/Login";
 import SignUp from "./features/login/pages/SignUp";
 import EnterDetails from "./features/personal-details-page/pages/EnterDetails";
 import HomePage from "./features/home-page/pages/HomePage";
-import WorkspacePage from "./features/workspace/pages/WorkspacePage";
-import ProfilePage from "./features/profile-page/pages/ProfilePage";
+import WorkspacePage from "./pages/WorkspacePage";
+import ProfilePage from "./pages/ProfilePage";
 
 function App() {
   return (
