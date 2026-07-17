@@ -1,4 +1,5 @@
 
+import { useNavigate } from 'react-router-dom'
 import ProfileHeader from './components/layout/ProfileHeader'
 import ProfileSidebar from './components/layout/ProfileSidebar'
 import BioCard from './components/profile/BioCard'
@@ -22,8 +23,10 @@ import { useProjectsActions } from './hooks/useProjectsActions'
 
 // Stores
 import { useUIStore } from '@/store/useUIStore'
+import { useProjectStore } from '@/store/useProjectStore'
 
 export default function ProfilePage() {
+  const navigate = useNavigate()
   const activeModal = useUIStore((state) => state.activeModal)
   const openModal = useUIStore((state) => state.openModal)
   const closeModal = useUIStore((state) => state.closeModal)
@@ -41,13 +44,16 @@ export default function ProfilePage() {
     requestAddProject,
     handleAddProject,
     handleToggleVisibility,
+    handleProjectClick,
   } = useProjectsActions()
 
-
+  const publishIdea = useProjectStore((state) => state.publishIdea)
 
   const handleCreateIdea = (ideaForm) => {
+    publishIdea(ideaForm.title, ideaForm.description, null, ideaForm.skills)
     closeModal()
-    showToast(`Successfully published idea: "${ideaForm.title}" in Category: ${ideaForm.category}`)
+    showToast(`Successfully published idea: "${ideaForm.title}"`)
+    navigate('/workspace')
   }
 
   return (
@@ -88,6 +94,7 @@ export default function ProfilePage() {
               projects={projects}
               onToggleVisibility={handleToggleVisibility}
               onAddProjectClick={requestAddProject}
+              onProjectClick={handleProjectClick}
             />
           </div>
 

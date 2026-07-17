@@ -1,4 +1,4 @@
-import { Bookmark } from "lucide-react";
+import { Bookmark, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -13,11 +13,17 @@ import {
 import { cn } from "@/lib/utils";
 import JoinProjectDialog from "./JoinProjectDialog";
 import { useProfileStore } from "@/store/useProfileStore";
+import { useAuthStore } from "@/store/useAuthStore";
+import { useProjectStore } from "@/store/useProjectStore";
 
 export default function ProjectCard({ project }) {
+  const currentUser = useAuthStore((state) => state.currentUser);
+  const deleteProject = useProjectStore((state) => state.deleteProject);
   const savedProjects = useProfileStore((state) => state.projectsList.saved || []);
   const toggleSaveProject = useProfileStore((state) => state.toggleSaveProject);
   const bookmarked = savedProjects.some((p) => p.id === project.id);
+
+  const isOwner = project.founder && project.founder.email === currentUser.email;
 
   return (
     <Card className="rounded-2xl border border-border bg-white shadow-sm transition-shadow hover:shadow-md">
@@ -39,16 +45,32 @@ export default function ProjectCard({ project }) {
               </Badge>
             ))}
           </div>
-          <button
-            type="button"
-            onClick={() => toggleSaveProject(project)}
-            className="text-muted-foreground transition-colors hover:text-foreground"
-            aria-label={bookmarked ? "Remove bookmark" : "Bookmark project"}
-          >
-            <Bookmark
-              className={cn("size-5", bookmarked && "fill-foreground text-foreground")}
-            />
-          </button>
+          <div className="flex items-center gap-2">
+            {isOwner && (
+              <button
+                type="button"
+                onClick={() => {
+                  if (window.confirm(`Are you sure you want to delete "${project.title}"?`)) {
+                    deleteProject(project.id);
+                  }
+                }}
+                className="text-red-500 hover:text-red-700 transition-colors p-1"
+                aria-label="Delete project idea"
+              >
+                <Trash2 className="size-5" />
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={() => toggleSaveProject(project)}
+              className="text-muted-foreground transition-colors hover:text-foreground"
+              aria-label={bookmarked ? "Remove bookmark" : "Bookmark project"}
+            >
+              <Bookmark
+                className={cn("size-5", bookmarked && "fill-foreground text-foreground")}
+              />
+            </button>
+          </div>
         </div>
 
         <div className="space-y-2">
@@ -79,6 +101,7 @@ export default function ProjectCard({ project }) {
             ideaName={project.title}
             description={project.description}
             skillsNeeded={project.skillsNeeded}
+            founder={project.founder}
           >
             <Button
               size="sm"

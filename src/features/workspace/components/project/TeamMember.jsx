@@ -1,10 +1,16 @@
-import { Check } from 'lucide-react'
+import { Check, UserMinus } from 'lucide-react'
+import { useIsFounder } from '../../hooks/useIsFounder'
+import { useProjectStore } from '@/store/useProjectStore'
+import { useMembersStore } from '@/store/useMembersStore'
+import { useUIStore } from '@/store/useUIStore'
 
 export default function TeamMember({ member }) {
-  const { name, role, avatar, tag } = member
+  const { id, name, role, avatar, tag } = member
+  const isFounder = useIsFounder()
+  const showToast = useUIStore((state) => state.showToast)
 
   return (
-    <div className="flex items-center justify-between py-3 border-b border-brand-border/60 last:border-0 last:pb-0">
+    <div className="flex items-center justify-between py-3 border-b border-brand-border/60 last:border-0 last:pb-0 group">
       
       {/* Left side: Avatar and Names */}
       <div className="flex items-center gap-3">
@@ -29,6 +35,21 @@ export default function TeamMember({ member }) {
           )}
         </div>
       </div>
+
+      {/* Right side: Delete/Remove link on hover for Founder */}
+      {isFounder && (
+        <button
+          onClick={() => {
+            useProjectStore.getState().removeMemberFromProject(id)
+            useMembersStore.getState().removeMember(id)
+            showToast(`Removed member ${name} from project.`)
+          }}
+          className="hidden group-hover:flex items-center gap-1 text-red-500 hover:text-red-700 text-xs font-bold transition-colors cursor-pointer p-2 hover:bg-red-50 rounded-lg"
+          title="Remove Member"
+        >
+          <UserMinus className="w-4 h-4" />
+        </button>
+      )}
 
     </div>
   )

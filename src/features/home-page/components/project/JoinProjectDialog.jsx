@@ -22,6 +22,7 @@ export default function JoinProjectDialog({
   ideaName,
   description,
   skillsNeeded = [],
+  founder,
 }) {
   const navigate = useNavigate();
   const currentUser = useAuthStore((state) => state.currentUser);
@@ -36,16 +37,9 @@ export default function JoinProjectDialog({
     setTimeout(() => {
       setIsLoading(false);
       setOpen(false);
-      toast.success("Your request has been sent successfully!");
-      
-      joinProjectUpdateStore(ideaName, description, skillsNeeded);
+      toast.success("Successfully joined the project!");
 
-      addJoinRequest({
-        id: currentUser.email,
-        name: currentUser.name,
-        avatar: currentUser.avatar,
-        role: currentUser.role,
-      });
+      joinProjectUpdateStore(ideaName, description, skillsNeeded, founder, currentUser);
       navigate("/workspace");
     }, 1200);
   };
@@ -126,10 +120,10 @@ export default function JoinProjectDialog({
             {isLoading ? (
               <>
                 <Loader2 className="size-4 animate-spin" />
-                Sending...
+                Joining...
               </>
             ) : (
-              "Request to Join"
+              "Join"
             )}
           </Button>
         </DialogFooter>

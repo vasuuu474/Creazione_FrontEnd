@@ -4,7 +4,7 @@ export const initialProjectData = {
   parentSubtitle: "Enterprise Infrastructure",
   phase: "DEPLOYMENT",
   updatedText: "Updated 2h ago",
-  scopeTitle: "Detailed Project Scope",
+  scopeTitle: "",
   scopeParagraphs: [
     "Project Alpha is our flagship enterprise infrastructure overhaul aimed at migrating legacy on-premise systems to a highly scalable, multi-cloud environment. The core focus is on 99.99% availability, automated failover mechanisms, and zero-trust security architecture.",
     "Our current sprint focuses on the orchestration layer using Kubernetes clusters across three geographic regions. We are integrating advanced telemetry and monitoring to ensure real-time visibility into microservices health and latency metrics."

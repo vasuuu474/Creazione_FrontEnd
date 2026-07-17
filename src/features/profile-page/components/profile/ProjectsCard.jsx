@@ -1,11 +1,13 @@
-import { Network, Shield, FolderGit2, Plus, Eye, EyeOff } from "lucide-react";
+import { Network, Shield, FolderGit2, Plus, Eye, EyeOff, Trash2 } from "lucide-react";
+import { useProjectStore } from "@/store/useProjectStore";
 
 export default function ProjectsCard({
   activeTab,
   setActiveTab,
   projects,
   onToggleVisibility,
-  onAddProjectClick
+  onAddProjectClick,
+  onProjectClick,
 }) {
   const tabs = [
     { id: "created", label: "Projects Created" },
@@ -65,8 +67,11 @@ export default function ProjectsCard({
               key={project.id}
               className="flex items-center justify-between p-4 bg-white dark:bg-[#1e2224] rounded-xl border border-border hover:border-primary dark:hover:border-[#355B44] hover:shadow-xs transition-all duration-200"
             >
-              {/* Left Side: Icon & Details */}
-              <div className="flex items-center gap-4 min-w-0">
+              {/* Left Side: Icon & Details (Clickable) */}
+              <div 
+                onClick={() => onProjectClick?.(project)}
+                className="flex-1 flex items-center gap-4 min-w-0 cursor-pointer"
+              >
                 {/* Project Icon */}
                 <div className="size-11 rounded-lg bg-primary flex items-center justify-center shrink-0">
                   {getIcon(project.iconType)}
@@ -74,7 +79,7 @@ export default function ProjectsCard({
                 
                 {/* Title & Desc */}
                 <div className="min-w-0">
-                  <h4 className="font-semibold text-sm md:text-base text-foreground dark:text-[#F9F8F4] truncate">
+                  <h4 className="font-semibold text-sm md:text-base text-foreground dark:text-[#F9F8F4] hover:text-primary dark:hover:text-[#b4cdb8] transition-colors truncate">
                     {project.title}
                   </h4>
                   <p className="text-xs md:text-sm text-muted-foreground truncate">
@@ -83,24 +88,42 @@ export default function ProjectsCard({
                 </div>
               </div>
 
-              {/* Right Side: Visibility Toggle */}
-              {activeTab !== 'saved' && (
-                <button
-                  type="button"
-                  onClick={() => onToggleVisibility(project.id)}
-                  title={project.isPublic ? "Set to Private" : "Set to Public"}
-                  className={`ml-3 p-2 rounded-lg border transition-all cursor-pointer shrink-0 ${
-                    project.isPublic
-                      ? "border-border text-muted-foreground hover:border-primary hover:text-primary dark:hover:border-white dark:hover:text-white"
-                      : "border-dashed border-border text-muted-foreground/50 hover:border-primary hover:text-primary dark:hover:border-white dark:hover:text-white"
-                  }`}
-                >
-                  {project.isPublic
-                    ? <Eye className="size-4" />
-                    : <EyeOff className="size-4" />
-                  }
-                </button>
-              )}
+              {/* Right Side: Actions */}
+              <div className="flex items-center gap-2 ml-3 shrink-0">
+                {activeTab !== 'saved' && (
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onToggleVisibility(project.id);
+                    }}
+                    title={project.isPublic ? "Set to Private" : "Set to Public"}
+                    className={`p-2 rounded-lg border transition-all cursor-pointer ${
+                      project.isPublic
+                        ? "border-border text-muted-foreground hover:border-primary hover:text-primary dark:hover:border-white dark:hover:text-white"
+                        : "border-dashed border-border text-muted-foreground/50 hover:border-primary hover:text-primary dark:hover:border-white dark:hover:text-white"
+                    }`}
+                  >
+                    {project.isPublic ? <Eye className="size-4" /> : <EyeOff className="size-4" />}
+                  </button>
+                )}
+
+                {activeTab === 'created' && (
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (window.confirm(`Are you sure you want to delete "${project.title}"?`)) {
+                        useProjectStore.getState().deleteProject(project.id);
+                      }
+                    }}
+                    title="Delete Project Idea"
+                    className="p-2 rounded-lg border border-red-200 text-red-500 hover:bg-red-50 hover:border-red-300 transition-all cursor-pointer"
+                  >
+                    <Trash2 className="size-4" />
+                  </button>
+                )}
+              </div>
 
             </div>
           ))

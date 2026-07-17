@@ -1,9 +1,12 @@
 import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
 import { initialProfileData } from '@/data/mock/profileData'
 import { getProfile, updateProfile } from '@/api/endpoints/profileApi'
 import { useAuthStore } from '@/store/useAuthStore'
 
-export const useProfileStore = create((set, get) => ({
+export const useProfileStore = create(
+  persist(
+    (set, get) => ({
   profile: initialProfileData.profile,
   bioText: initialProfileData.bioText,
   languages: initialProfileData.languages,
@@ -85,6 +88,36 @@ export const useProfileStore = create((set, get) => ({
 
   setActiveTab: (tab) => set({ activeTab: tab }),
 
+  addCreatedProject: async (project) => {
+    const projectsList = get().projectsList
+    const nextProjects = {
+      ...projectsList,
+      created: [...(projectsList.created || []), project],
+    }
+    set({ projectsList: nextProjects })
+    try {
+      await updateProfile({ projectsList: nextProjects })
+    } catch (err) {
+      set({ error: err.message })
+    }
+  },
+
+  deleteProfileProject: async (projectId) => {
+    const projectsList = get().projectsList
+    const nextProjects = {
+      created: (projectsList.created || []).filter((p) => p.id !== projectId),
+      worked: (projectsList.worked || []).filter((p) => p.id !== projectId),
+      invested: (projectsList.invested || []).filter((p) => p.id !== projectId),
+      saved: (projectsList.saved || []).filter((p) => p.id !== projectId),
+    }
+    set({ projectsList: nextProjects })
+    try {
+      await updateProfile({ projectsList: nextProjects })
+    } catch (err) {
+      set({ error: err.message })
+    }
+  },
+
   addProject: async (project) => {
     const activeTab = get().activeTab
     const projectsList = get().projectsList
@@ -154,7 +187,12 @@ export const useProfileStore = create((set, get) => ({
       set({ error: err.message })
     }
   },
-}))
+}),
+    {
+      name: 'creazione_profile_storage',
+    }
+  )
+)
 
 // Auto-sync useProfileStore state with useAuthStore's currentUser
 useAuthStore.subscribe((state) => {

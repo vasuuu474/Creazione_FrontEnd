@@ -14,6 +14,12 @@ export const projects = [
     ],
     bookmarked: false,
     skillsNeeded: ["React", "Node.js", "Blockchain", "Solidity", "UI/UX"],
+    founder: {
+      name: "Dr. Aris Thorne",
+      role: "Chief Architect",
+      avatar: "/src/assets/founder_aris.jpg",
+      email: "aris.thorne@creazione.com"
+    },
   },
   {
     id: 2,
@@ -29,6 +35,12 @@ export const projects = [
     ],
     bookmarked: false,
     skillsNeeded: ["Python", "AI/ML", "TensorFlow", "React", "UI/UX"],
+    founder: {
+      name: "Dr. Aris Thorne",
+      role: "Chief Architect",
+      avatar: "/src/assets/founder_aris.jpg",
+      email: "aris.thorne@creazione.com"
+    },
   },
   {
     id: 3,
@@ -45,6 +57,12 @@ export const projects = [
     ],
     bookmarked: false,
     skillsNeeded: ["Node.js", "React", "MongoDB", "Figma", "UI/UX"],
+    founder: {
+      name: "Dr. Aris Thorne",
+      role: "Chief Architect",
+      avatar: "/src/assets/founder_aris.jpg",
+      email: "aris.thorne@creazione.com"
+    },
   },
   {
     id: 4,
@@ -60,6 +78,12 @@ export const projects = [
     ],
     bookmarked: false,
     skillsNeeded: ["Unity", "React", "UI/UX", "3D Modeling", "TypeScript"],
+    founder: {
+      name: "Dr. Aris Thorne",
+      role: "Chief Architect",
+      avatar: "/src/assets/founder_aris.jpg",
+      email: "aris.thorne@creazione.com"
+    },
   },
 ];
 

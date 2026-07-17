@@ -8,13 +8,40 @@ export default function Sidebar() {
   const activeView = useUIStore((state) => state.activeView)
   const setActiveView = useUIStore((state) => state.setActiveView)
   const openModal = useUIStore((state) => state.openModal)
+  const isEditingHeader = useUIStore((state) => state.isEditingHeader)
   const isFounder = useIsFounder()
-  const { requestEditHeader } = useHeaderEditing()
+  const { requestEditHeader, stopEditHeader } = useHeaderEditing()
+
+  const currentActiveId = isEditingHeader ? 'settings' : activeView
 
   const menuItems = [
-    { id: 'workspace', label: 'Workspace', icon: LayoutDashboard, action: () => setActiveView('workspace') },
-    { id: 'members', label: 'Members', icon: Users, action: () => openModal('members-roster') },
-    ...(isFounder ? [{ id: 'settings', label: 'Settings', icon: Settings, action: requestEditHeader }] : []),
+    { 
+      id: 'workspace', 
+      label: 'Workspace', 
+      icon: LayoutDashboard, 
+      action: () => {
+        stopEditHeader()
+        setActiveView('workspace')
+      } 
+    },
+    { 
+      id: 'members', 
+      label: 'Members', 
+      icon: Users, 
+      action: () => {
+        stopEditHeader()
+        setActiveView('members')
+      } 
+    },
+    ...(isFounder ? [{ 
+      id: 'settings', 
+      label: 'Settings', 
+      icon: Settings, 
+      action: () => {
+        setActiveView('workspace')
+        requestEditHeader()
+      } 
+    }] : []),
     { id: 'help', label: 'Help', icon: HelpCircle, action: () => openModal('help') },
   ]
 
@@ -25,7 +52,7 @@ export default function Sidebar() {
       <nav className="space-y-1.5 flex-1">
         {menuItems.map((item) => {
           const Icon = item.icon
-          const isActive = activeView === item.id
+          const isActive = currentActiveId === item.id
 
           return (
             <button

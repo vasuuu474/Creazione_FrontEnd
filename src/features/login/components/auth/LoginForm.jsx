@@ -11,19 +11,24 @@ export default function LoginForm({ onSignUpClick, onLoginSuccess }) {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const setUser = useAuthStore((state) => state.setUser);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const login = useAuthStore((state) => state.login);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    // TODO: replace with a real auth API call once the backend exists.
-    setUser({
-      name: email.split("@")[0] || "New User",
-      email,
-      role: "Member",
-      avatar: "",
-    });
-    onLoginSuccess?.();
+    setError(null);
+    setLoading(true);
+    try {
+      await login(email, password);
+      onLoginSuccess?.();
+    } catch (err) {
+      setError(err.message || "Invalid email or password. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
+
 
   return (
     <div className="w-full max-w-[520px] bg-transparent">
@@ -90,8 +95,19 @@ export default function LoginForm({ onSignUpClick, onLoginSuccess }) {
 
         </div>
 
-        <Button type="submit" className="w-full h-[52px] rounded-[12px] bg-[var(--app-panel)] hover:bg-[var(--app-panel-hover)] text-white font-semibold text-base transition-all duration-300 shadow-none cursor-pointer">
-          Login
+        {/* Error Alert */}
+        {error && (
+          <div className="p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg">
+            {error}
+          </div>
+        )}
+
+        <Button
+          type="submit"
+          disabled={loading}
+          className="w-full h-[52px] rounded-[12px] bg-[var(--app-panel)] hover:bg-[var(--app-panel-hover)] text-white font-semibold text-base transition-all duration-300 shadow-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {loading ? "Logging in..." : "Login"}
         </Button>
 
         <p className="text-center text-[12px] text-[var(--app-subtle)] mt-2 font-medium transition-colors duration-300">

@@ -53,17 +53,23 @@ export default function EnterDetails() {
 
   const addSkill = () => {
     if (newSkill.trim()) {
-      setSkills([...skills, newSkill]);
+      const skillVal = newSkill.trim();
+      setSkills([...skills, skillVal]);
+      setSelectedSkills([...selectedSkills, skillVal]);
       setNewSkill("");
       setShowSkillModal(false);
+      setErrors((prev) => ({ ...prev, skills: "" }));
     }
   };
 
   const addLanguage = () => {
     if (newLanguage.trim()) {
-      setLanguages([...languages, newLanguage]);
+      const langVal = newLanguage.trim();
+      setLanguages([...languages, langVal]);
+      setSelectedLanguages([...selectedLanguages, langVal]);
       setNewLanguage("");
       setShowLanguageModal(false);
+      setErrors((prev) => ({ ...prev, languages: "" }));
     }
   };
 
@@ -120,12 +126,12 @@ export default function EnterDetails() {
                   value={fullName}
                   onChange={(e) => {
                     setFullName(e.target.value);
-                    setErrors(prev => ({ ...prev, fullName: "" }));
+                    setErrors((prev) => ({ ...prev, fullName: "" }));
                   }}
-                  className={`w-full h-10 px-3 mt-2 rounded-lg border ${errors.fullName ? "border-[#ba1a1a]" : "border-[#e1e4ea]"} bg-[#f8f9fc] text-sm`}
+                  className="w-full text-sm border border-[#d7d7d7] rounded-lg px-3 py-2 mt-1 focus:outline-none focus:border-[#1b3022] font-semibold"
                 />
                 {errors.fullName && (
-                  <div className="bg-[#ffdad6] text-[#ba1a1a] border border-[#ffdad6] text-[11px] p-2 rounded-lg font-semibold mt-2 transition-all duration-300">
+                  <div className="bg-[#ffdad6] text-[#ba1a1a] border border-[#ffdad6] text-[11px] p-2 rounded-lg font-semibold mt-2 transition-all duration-300 w-fit">
                     {errors.fullName}
                   </div>
                 )}
@@ -137,16 +143,16 @@ export default function EnterDetails() {
                 </label>
 
                 <input
-                  placeholder="e.g. London, UK"
+                  placeholder="City, Country"
                   value={location}
                   onChange={(e) => {
                     setLocation(e.target.value);
-                    setErrors(prev => ({ ...prev, location: "" }));
+                    setErrors((prev) => ({ ...prev, location: "" }));
                   }}
-                  className={`w-full h-10 px-3 mt-2 rounded-lg border ${errors.location ? "border-[#ba1a1a]" : "border-[#e1e4ea]"} bg-[#f8f9fc] text-sm`}
+                  className="w-full text-sm border border-[#d7d7d7] rounded-lg px-3 py-2 mt-1 focus:outline-none focus:border-[#1b3022] font-semibold"
                 />
                 {errors.location && (
-                  <div className="bg-[#ffdad6] text-[#ba1a1a] border border-[#ffdad6] text-[11px] p-2 rounded-lg font-semibold mt-2 transition-all duration-300">
+                  <div className="bg-[#ffdad6] text-[#ba1a1a] border border-[#ffdad6] text-[11px] p-2 rounded-lg font-semibold mt-2 transition-all duration-300 w-fit">
                     {errors.location}
                   </div>
                 )}
@@ -155,21 +161,20 @@ export default function EnterDetails() {
 
             <div className="mt-4">
               <label className="text-xs font-semibold uppercase tracking-wider">
-                Professional Bio
+                Bio / Description
               </label>
 
               <textarea
-                rows={3}
-                placeholder="Briefly describe your expertise and focus areas..."
+                placeholder="Share a brief overview of your professional background..."
                 value={bio}
                 onChange={(e) => setBio(e.target.value)}
-                className="w-full mt-2 p-3 rounded-lg border border-[#e1e4ea] bg-[#f8f9fc] resize-none text-sm"
+                className="w-full text-sm border border-[#d7d7d7] rounded-lg px-3 py-2 mt-1 focus:outline-none focus:border-[#1b3022] min-h-[100px]"
               />
             </div>
 
             <div className="mt-4">
               <h3 className="text-xs font-semibold uppercase tracking-wider mb-2">
-                Core Skills
+                Professional Skills
               </h3>
 
               <div className="flex flex-wrap gap-2">
@@ -256,21 +261,27 @@ export default function EnterDetails() {
                     }
                     setErrors({});
 
-                    // Update profile store
+                    const formattedLangs = selectedLanguages.map(l => ({ name: l, level: 'Native' }));
+
+                    // 1. Update Auth Store first with full user details so subscription registers them correctly
+                    const currentUser = useAuthStore.getState().currentUser;
+                    useAuthStore.getState().setUser({
+                      ...currentUser,
+                      name: fullName,
+                      location: location,
+                      bioText: bio,
+                      skills: selectedSkills,
+                      languages: formattedLangs,
+                    });
+
+                    // 2. Update profile store
                     useProfileStore.getState().saveProfileEdits({
                       name: fullName,
                       location: location,
                     });
                     useProfileStore.getState().saveBio(bio);
                     useProfileStore.getState().saveSkills(selectedSkills);
-                    useProfileStore.getState().saveLanguages(selectedLanguages.map(l => ({ name: l, level: 'Native' })));
-
-                    // Update auth store
-                    const currentUser = useAuthStore.getState().currentUser;
-                    useAuthStore.getState().setUser({
-                      ...currentUser,
-                      name: fullName,
-                    });
+                    useProfileStore.getState().saveLanguages(formattedLangs);
 
                     navigate("/home");
                   }}

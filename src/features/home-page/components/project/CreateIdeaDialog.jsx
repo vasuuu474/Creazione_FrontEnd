@@ -97,7 +97,7 @@ export default function CreateIdeaDialog({ children }) {
 
     // Sets the current user as this project's founder — Workspace's
     // useIsFounder() will now return true for them, showing the founder UI.
-    publishIdea(form.ideaName.trim(), form.description.trim(), currentUser);
+    publishIdea(form.ideaName.trim(), form.description.trim(), currentUser, form.skills);
 
     setOpen(false);
     resetForm();

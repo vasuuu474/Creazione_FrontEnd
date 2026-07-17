@@ -1,8 +1,19 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import SignUpForm from "./components/auth/SignUpForm";
+import { useAuthStore } from "@/store/useAuthStore";
 
 export default function SignUp() {
   const navigate = useNavigate();
+  const token = useAuthStore((state) => state.token);
+  const currentUser = useAuthStore((state) => state.currentUser);
+
+  // Auto-redirect to home if already logged in
+  useEffect(() => {
+    if (token && currentUser?.email) {
+      navigate("/home");
+    }
+  }, [token, currentUser, navigate]);
 
   return (
     <div className="min-h-screen w-full flex bg-[var(--app-bg)] overflow-x-hidden font-sans transition-colors duration-300">

@@ -13,18 +13,20 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
-  projects,
   categories,
   sortOptions,
 } from "./data/projects";
+import { useProjectStore } from "@/store/useProjectStore";
 
 export default function HomePage() {
+  const allProjects = useProjectStore((state) => state.allProjects);
   const [search, setSearch] = useState("");
   const [selectedCategories, setSelectedCategories] = useState(["All"]);
   const [sortBy, setSortBy] = useState("trending");
 
   const filteredProjects = useMemo(() => {
-    return projects.filter((project) => {
+    return allProjects.filter((project) => {
+
       const matchesSearch =
         search === "" ||
         project.title.toLowerCase().includes(search.toLowerCase()) ||

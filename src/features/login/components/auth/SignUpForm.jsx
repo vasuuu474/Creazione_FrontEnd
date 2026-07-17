@@ -14,7 +14,9 @@ import {
 import { useAuthStore } from "@/store/useAuthStore";
 
 export default function SignUpForm({ onLoginClick, onSignUpSuccess }) {
-  const setUser = useAuthStore((state) => state.setUser);
+  const register = useAuthStore((state) => state.register);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [form, setForm] = useState({
     firstName: "",
@@ -35,18 +37,27 @@ export default function SignUpForm({ onLoginClick, onSignUpSuccess }) {
     setForm((prev) => ({ ...prev, countryCode: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: replace with a real signup API call once the backend exists.
-    const fullName = `${form.firstName}${form.middleName ? ' ' + form.middleName : ''}${form.lastName ? ' ' + form.lastName : ''}`;
-    setUser({
-      name: fullName,
-      email: form.email,
-      role: "Member",
-      avatar: "",
-    });
-    onSignUpSuccess?.();
+    setError(null);
+    setLoading(true);
+    try {
+      await register({
+        firstName: form.firstName,
+        middleName: form.middleName || undefined,
+        lastName: form.lastName,
+        email: form.email,
+        password: form.password,
+        mobileNumber: form.phone ? `${form.countryCode}${form.phone}` : undefined,
+      });
+      onSignUpSuccess?.();
+    } catch (err) {
+      setError(err.message || "Failed to create account. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
+
 
   return (
     <div className="w-full max-w-[520px] bg-transparent">
@@ -188,12 +199,20 @@ export default function SignUpForm({ onLoginClick, onSignUpSuccess }) {
           </div>
         </div>
 
+        {/* Error Alert */}
+        {error && (
+          <div className="p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg">
+            {error}
+          </div>
+        )}
+
         {/* Submit Button */}
         <Button
           type="submit"
-          className="w-full h-[52px] rounded-[12px] bg-[var(--app-panel)] hover:bg-[var(--app-panel-hover)] text-white font-semibold text-base transition-all duration-300 shadow-none cursor-pointer mt-2"
+          disabled={loading}
+          className="w-full h-[52px] rounded-[12px] bg-[var(--app-panel)] hover:bg-[var(--app-panel-hover)] text-white font-semibold text-base transition-all duration-300 shadow-none cursor-pointer mt-2 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Create Account
+          {loading ? "Creating Account..." : "Create Account"}
         </Button>
       </form>
 
